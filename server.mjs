@@ -1,30 +1,32 @@
-import { appendFile, readFile, writeFile } from "fs";
+import { appendFile, readFile, writeFile, unlink } from "fs/promises";
 import path from "path";
 import { URL } from "url";
 
 const __dirname = new URL(".", import.meta.url).pathname;
-readFile(path.join(__dirname, "files", "file1.txt"), (err, data) => {
-  if (err) {
-    throw err;
-  }
-  console.log(data.toString());
-});
 
-console.log("Hey!!");
+const fileOps = async () => {
+  try {
+    const data = await readFile(path.join(__dirname, "files", "file1.txt"));
+    console.log(data.toString());
+    await writeFile(
+      path.join(__dirname, "files", "myFile.txt"),
+      data.toString()
+    );
 
-writeFile(path.join(__dirname, "files", "file2.txt"), "This is test", (err) => {
-  if (err) {
-    throw err;
-  }
-  console.log("File Written");
-});
+    await appendFile(
+      path.join(__dirname, "files", "myFile.txt"),
+      "\n6666666666666"
+    );
+    const newData = await readFile(path.join(__dirname, "files", "myFile.txt"));
+    console.log(newData.toString());
 
-appendFile(path.join(__dirname, "files", "file2.txt"), "yah yah", (err) => {
-  if (err) {
-    throw err;
+    await unlink(path.join(__dirname, "files", "file2.txt"));
+  } catch (err) {
+    console.log(err);
   }
-  console.log("File Appended");
-});
+};
+
+fileOps();
 
 process.on("uncaughtException", (err) => {
   console.log(err);
