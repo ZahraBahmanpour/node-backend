@@ -37,3 +37,16 @@ const server = http.createServer((req, res) => {
 
 // always at the end
 server.listen(PORT, () => console.log(`server running on ${PORT}`));
+
+const path = require("path");
+const os = require("os");
+
+console.log("hello");
+// console.log(global);
+console.log(__dirname);
+console.log(__filename);
+console.log(path.dirname(__filename));
+console.log(path.basename(__filename));
+console.log(path.extname(__filename));
+// console.log(os.type());
+// console.log(os.version());
